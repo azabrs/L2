@@ -27,7 +27,7 @@ type PostgresConfig struct{
 
 func LoadConfig()  (*viper.Viper, error){
 	v := viper.New()
-	v.AddConfigPath("configs")
+	v.AddConfigPath("./../configs")
 	v.SetConfigName("config")
 	v.SetConfigType("yaml")
 	err := v.ReadInConfig()
