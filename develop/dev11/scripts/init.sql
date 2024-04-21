@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS events (
     event_id SERIAL PRIMARY KEY,
-    user_id TEXT,
+    user_id TEXT NOT NULL,
     week_number INT NOT NULL,
     day_number INT NOT NULL,
     month_name TEXT NOT NULL,

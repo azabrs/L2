@@ -144,9 +144,13 @@ func(s Server)UpdateEvent(w http.ResponseWriter, r *http.Request){
 
 func(s Server)DeleteEvent(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
-	userID := r.URL.Query().Get("user_id")
-	eventID := r.URL.Query().Get("event_id")
-	if err := s.service.DeleteEvent(userID, eventID); err == constants.ErrIncorrectInputData{
+	var newEvent models.EventChange
+	if err := json.NewDecoder(r.Body).Decode(&newEvent); err != nil{
+		jsonErr, _ := json.MarshalIndent(&ErrorResponse{Err: err.Error()}, " ", " ")
+		http.Error(w, string(jsonErr), http.StatusBadRequest)
+		return
+	}
+	if err := s.service.DeleteEvent(newEvent.UserID, newEvent.EventID); err == constants.ErrIncorrectInputData{
 		jsonErr, _ := json.MarshalIndent(&ErrorResponse{Err: err.Error()}, " ", " ")
 		http.Error(w, string(jsonErr), http.StatusBadRequest)
 		return

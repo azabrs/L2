@@ -15,11 +15,12 @@ type EventCreate struct{
 	Date string `json:"date" binding "required"`
 	DataEvent EventData `json:"data_event" binding "required"`
 	UserID string `json:"user_id" binding "required"`
+	EventID string `json:"event_id" binding "required"`
 }
 
 type EventChange struct{
 	Date string `json:"date" binding "required"`
-	DataEvent EventData
+	DataEvent EventData `json:"data_event" binding "required"`
 	UserID string `json:"user_id" binding "required"`
 	EventID string `json:"event_id" binding "required"`
 }
