@@ -1,6 +1,8 @@
 package main
 
-type Command{
+import "fmt"
+
+type Command interface{
     Execute() string
 }
 
@@ -32,11 +34,11 @@ func (r *Receiver)TogleOff() string{
     return "TogleOff"
 }
 
-type Invocker struct{
+type Invoker struct{
     commands []Command
 }
 
-func (i *Invocker)StoreCommand(command Command){
+func (i *Invoker)StoreCommand(command Command){
    i.commands = append(i.commands, command) 
 }
 
@@ -53,4 +55,17 @@ func (i *Invoker) Execute() string {
 		result += command.Execute() + "\n"
 	}
 	return result
+}
+
+func main(){
+    invoker := &Invoker{}
+	receiver := &Receiver{}
+
+	invoker.StoreCommand(&ToggleOnCommand{receiver: receiver})
+	invoker.StoreCommand(&ToggleOffCommand{receiver: receiver})
+
+	result := invoker.Execute()
+
+    fmt.Println(result)
+
 }
