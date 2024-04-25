@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+	"strings"
+)
 
 func compareMap(m1 map[rune]int, m2 map[rune]int) bool{
 	if len(m1) != len(m2){
@@ -15,17 +19,27 @@ func compareMap(m1 map[rune]int, m2 map[rune]int) bool{
 	return true
 }
 
-func PrintMap(res map[string][]string){
-	for key, words := range(res){
+func PrintMap(notSort map[string][]string)map[string][]string{
+	res := make(map[string][]string)
+	for key, words := range(notSort){
+		sort.Strings(words)
+		res[key] = words
 		fmt.Printf("%v : ", key)
 		fmt.Println(words)
 	}
+	return res
 }
 
-func Solve(words []string){
+func Solve(words []string) map[string][]string{
 	uniq := make(map[string]map[rune]int)
 	res := make(map[string][]string)
+	unique_name :=make(map[string]bool)
 	for _, word := range(words){
+		word = strings.ToLower(word)
+		if _, ok := unique_name[word]; ok{
+			continue
+		}
+		unique_name[word] = true
 		wordMap := make(map[rune]int)
 		for _, letter := range(word){
 			if val, exist := wordMap[letter]; exist{
@@ -41,16 +55,18 @@ func Solve(words []string){
 				res[key] = append(res[key], word)
 			}
 		}
-		if isExist == false{
+		if !isExist{
 			res[word] = []string{word}
+
 			uniq[word] = wordMap
 		}
 	}
 
-	PrintMap(res)
+	res = PrintMap(res)
+	return res
 }
 
 func main(){
-	Solve([]string{"пятак", "пятка", "тяпка", "листок", "слиток", "столик"})
+	Solve([]string{"пятак", "пятка", "тяпка", "листок",  "пяТка", "слиток", "столик"})
 	
 }
